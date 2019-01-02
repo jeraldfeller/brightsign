@@ -16,6 +16,8 @@ $(function () {
 
 
               $('#actionButton').click(function(){
+                $btn = $(this);
+                $btn.attr('disabled', true);
                 $checkboxes = $('.CheckboxGroup:checkbox:checked');
                 $data = [];
                 $.each($checkboxes, function(){
@@ -41,8 +43,9 @@ $(function () {
                      alert('Files successfully added.');
                    }else{
                      alert('Something went wrong, please try again.');
-                     location.reload();
+                     //location.reload();
                    }
+                  $btn.attr('disabled', false);
                 });
               });
 
