@@ -8,10 +8,34 @@
     transition: all 0.2s linear;
 }
 
+
+.btn.btn-danger {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
 .btn-default {
     color: #333;
     background-color: #fff;
     border-color: #ccc;
+}
+
+.btn-sm, .btn-group-sm>.btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
 }
 
 .btn {
@@ -105,4 +129,10 @@
     width: 100%;
     margin: auto;
     text-align: center;
+}
+
+
+.delete-image-container{
+    position: absolute;
+    right: 0;
 }

@@ -49,6 +49,27 @@ $(function () {
                 });
               });
 
+
+              $('.delete-image').click(function(){
+                $btn = $(this);
+                $file = $(this).attr('data-file-name');
+                $confirm = confirm("Are you sure do you want to delete this image?");
+                if($confirm == true){
+                  $.ajax({
+                    url: 'controller/api.php?action=delete',
+                    type: 'POST',
+                    data: {
+                      data: {
+                        file: $file
+                      }
+                    },
+                    dataType: 'json'
+                  }).done(function (response) {
+                    $btn.parent().parent().parent().remove();
+                  });
+                }
+              });
+
             }
           )
       }
@@ -92,15 +113,15 @@ function buildHtml(file) {
   var directories = '';
   for(var i = 0; i < file.directories.length; i++){
     directories += '<label>' +
-      '<input type="checkbox" class="CheckboxGroup" data-file-name="'+file.file+'" data-directory="'+file.directories[i]+'">' +
-      file.directories[i]+'</label>' +
+      '<input type="checkbox" class="CheckboxGroup" data-file-name="'+file.file+'" data-directory="'+file.directories[i].directory+'">' +
+      file.directories[i].name+'</label>' +
       '<br>' +
       '<label>'
   }
 
 
   if(file.ext == 'mp4'){
-    var thumb = '<video class="video" style="width: 192px; height: 108px; background: #fff" controls>'
+    var thumb = '<video class="video" style=" width: 192px; height: 108px; background: #fff" controls>'
       + '<source src="'+file.fileDirectory+'" type="video/mp4">'
       + 'Your browser does not support HTML5 video.'
       + '</video>';
@@ -108,8 +129,11 @@ function buildHtml(file) {
     var thumb = '<img src="'+file.fileDirectory+'" alt="" class="thumbnails"/>';
   }
 
-  return '<div style="float: left; width: 330px;">' +
+  return '<div style=" float: left; width: 330px; min-height: 330px;">' +
+      '<div style="position: relative; width: 192px;">' +
+      '<div class="delete-image-container"><button data-file-name="'+file.file+'" class="btn btn-danger btn-sm delete-image" title="Delete Image">X</button></div>' +
     thumb +'<br>' +
+    '</div>' +
     '<p>' +
       directories +
     '</p>' +
