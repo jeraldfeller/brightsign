@@ -26,8 +26,8 @@ height: 100%;
 	font-size: 16px;
 	line-height: 18px;
 	float:left;
-	padding: 50px 0 0 50px;
-	width: 1000px;
+	padding: 50px 0 0 0;
+	width: 100%;
 }
 .smallprint2 {  
 	font-family: "fira-sans-2";

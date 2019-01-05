@@ -19,10 +19,18 @@
     transition: all 0.2s linear;
 }
 
+
+
 .btn-danger {
     color: #fff;
     background-color: #d9534f;
     border-color: #d43f3a;
+}
+
+.btn-dark {
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
 }
 
 .btn-default {
@@ -135,4 +143,16 @@
 .delete-image-container{
     position: absolute;
     right: 0;
+    z-index: 45666;
+}
+
+.button-container{
+    margin: auto;
+    width: 200px;
+    text-align: center;
+}
+
+.nav-button-container{
+    margin: auto;
+    text-align: center;
 }

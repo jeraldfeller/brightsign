@@ -1,83 +1,3 @@
-$(function () {
-
-  scanDir('Upload')
-    .then(
-      files => {
-        checkFile(files)
-          .then(
-            res => {
-              $htmlData = '';
-              for($i = 0; $i < res.length; $i++){
-                $htmlData += buildHtml(res[$i]);
-              }
-
-              $('.images-container').html($htmlData).removeClass('display-none');
-              $('.loader').addClass('display-none');
-
-
-              $('#actionButton').click(function(){
-                $btn = $(this);
-                $btn.attr('disabled', true);
-                $checkboxes = $('.CheckboxGroup:checkbox:checked');
-                $data = [];
-                $.each($checkboxes, function(){
-                  $file = $(this).attr('data-file-name');
-                  $dir = $(this).attr('data-directory');
-                  $(this).parent().remove();
-                  $data.push({
-                    file: $file,
-                    directory: $dir
-                  });
-                })
-
-
-                $.ajax({
-                  url: 'controller/api.php?action=move',
-                  type: 'POST',
-                  data: {
-                    data: $data
-                  },
-                  dataType: 'json'
-                }).done(function (response) {
-                   if(response){
-                     alert('Files successfully added.');
-                   }else{
-                     alert('Something went wrong, please try again.');
-                     //location.reload();
-                   }
-                  $btn.attr('disabled', false);
-                });
-              });
-
-
-              $('.delete-image').click(function(){
-                $btn = $(this);
-                $file = $(this).attr('data-file-name');
-                $confirm = confirm("Are you sure do you want to delete this image?");
-                if($confirm == true){
-                  $.ajax({
-                    url: 'controller/api.php?action=delete',
-                    type: 'POST',
-                    data: {
-                      data: {
-                        file: $file
-                      }
-                    },
-                    dataType: 'json'
-                  }).done(function (response) {
-                    $btn.parent().parent().parent().remove();
-                  });
-                }
-              });
-
-            }
-          )
-      }
-    );
-
-});
-
-
 function scanDir($dir) {
   return new Promise((resolve, reject) => {
     $.ajax({
@@ -93,13 +13,19 @@ function scanDir($dir) {
   })
 }
 
-function checkFile($files) {
+function checkFile($files, $dir = '') {
+  if($dir == ''){
+    var action = 'checkFile';
+  }else{
+    var action = 'checkFileSingle';
+  }
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: 'controller/api.php?action=checkFile',
+      url: 'controller/api.php?action='+action,
       type: 'POST',
       data: {
-        files: $files
+        files: $files,
+        dir: $dir
       },
       dataType: 'json'
     }).done(function (response) {
@@ -129,13 +55,38 @@ function buildHtml(file) {
     var thumb = '<img src="'+file.fileDirectory+'" alt="" class="thumbnails"/>';
   }
 
-  return '<div style=" float: left; width: 330px; min-height: 330px;">' +
+  return '<div style="padding-left: 50px; float: left; width: 300px; min-height: 330px;">' +
       '<div style="position: relative; width: 192px;">' +
       '<div class="delete-image-container"><button data-file-name="'+file.file+'" class="btn btn-danger btn-sm delete-image" title="Delete Image">X</button></div>' +
     thumb +'<br>' +
     '</div>' +
     '<p>' +
       directories +
+    '</p>' +
+    '</div>';
+}
+
+
+function buildHtmlSingle(file) {
+
+  if(file.ext == 'mp4'){
+    var thumb = '<video class="video" style=" width: 192px; height: 108px; background: #fff" controls>'
+      + '<source src="'+file.fileDirectory+'" type="video/mp4">'
+      + 'Your browser does not support HTML5 video.'
+      + '</video>';
+  }else{
+    var thumb = '<img src="'+file.fileDirectory+'" alt="" class="thumbnails"/>';
+  }
+
+  return '<div style="padding-left: 50px; float: left; width: 300px; min-height: 200px;">' +
+    '<div style="position: relative; width: 192px;">' +
+    '<div class="delete-image-container"><button data-directory="'+file.directory+'" data-file-name="'+file.file+'" class="btn btn-danger btn-sm delete-image" title="Delete Image">X</button></div>' +
+    thumb +'<br>' +
+    '</div>' +
+    '<p>' +
+    '<label>' +
+    '<input type="checkbox" class="CheckboxGroup" data-file-name="'+file.file+'" data-directory="'+file.directory+'">Move to UPLOAD folder' +
+    '</label>' +
     '</p>' +
     '</div>';
 }

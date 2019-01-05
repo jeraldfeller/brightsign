@@ -11,8 +11,8 @@
   }</script>
 
   <title>Brightsign Layouts</title>
-  <link rel="stylesheet" type="text/css" href="maincss.css">
-  <link rel="stylesheet" type="text/css" href="assets/css/styles.css?v=1.1">
+  <link rel="stylesheet" type="text/css" href="maincss.css?v=1.1">
+  <link rel="stylesheet" type="text/css" href="assets/css/styles.css?v=1.2">
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <script src="assets/js/jquery-3.3.1.min.js"></script>
@@ -41,7 +41,87 @@
 </div>
 
 
-<script src="assets/js/app.js?v=1.4"></script>
+<script src="assets/js/app.js?v=1.8"></script>
+<script>
+  $(function () {
 
+    scanDir('Upload')
+      .then(
+        files => {
+          checkFile(files)
+            .then(
+              res => {
+                $htmlData = '';
+                for($i = 0; $i < res.length; $i++){
+                  $htmlData += buildHtml(res[$i]);
+                }
+
+                $('.images-container').html($htmlData).removeClass('display-none');
+                $('.loader').addClass('display-none');
+
+
+                $('#actionButton').click(function(){
+                  $btn = $(this);
+                  $btn.attr('disabled', true);
+                  $checkboxes = $('.CheckboxGroup:checkbox:checked');
+                  $data = [];
+                  $.each($checkboxes, function(){
+                    $file = $(this).attr('data-file-name');
+                    $dir = $(this).attr('data-directory');
+                    $(this).parent().remove();
+                    $data.push({
+                      file: $file,
+                      directory: $dir
+                    });
+                  })
+
+
+                  $.ajax({
+                    url: 'controller/api.php?action=move',
+                    type: 'POST',
+                    data: {
+                      data: $data,
+                      action: 0
+                    },
+                    dataType: 'json'
+                  }).done(function (response) {
+                    if(response){
+                      alert('Files successfully added.');
+                    }else{
+                      alert('Something went wrong, please try again.');
+                      //location.reload();
+                    }
+                    $btn.attr('disabled', false);
+                  });
+                });
+
+
+                $('.delete-image').click(function(){
+                  $btn = $(this);
+                  $file = $(this).attr('data-file-name');
+                  $confirm = confirm("Are you sure do you want to delete this image?");
+                  if($confirm == true){
+                    $.ajax({
+                      url: 'controller/api.php?action=delete',
+                      type: 'POST',
+                      data: {
+                        data: {
+                          file: $file
+                        }
+                      },
+                      dataType: 'json'
+                    }).done(function (response) {
+                      $btn.parent().parent().parent().remove();
+                    });
+                  }
+                });
+
+              }
+            )
+        }
+      );
+
+  });
+</script>
 </body>
 </html>
