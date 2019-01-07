@@ -124,6 +124,43 @@
 
 
 
+
+    $('#actionButton').click(function(){
+      $btn = $(this);
+      $btn.attr('disabled', true);
+      $checkboxes = $('.CheckboxGroup:checkbox:checked');
+      $data = [];
+      $.each($checkboxes, function(){
+        $file = $(this).attr('data-file-name');
+        $dir = $(this).attr('data-directory');
+        $(this).parent().parent().parent().remove();
+        $data.push({
+          file: $file,
+          directory: $dir
+        });
+      })
+
+
+      $.ajax({
+        url: 'controller/api.php?action=move',
+        type: 'POST',
+        data: {
+          data: $data,
+          action: 1
+        },
+        dataType: 'json'
+      }).done(function (response) {
+        if(response){
+          alert('Files successfully moved.');
+        }else{
+          alert('Something went wrong, please try again.');
+          //location.reload();
+        }
+        $btn.attr('disabled', false);
+      });
+    });
+
+
   });
 
   function getFiles(dir){
@@ -141,43 +178,6 @@
                 }
                 $('.images-container').html($htmlData).removeClass('display-none');
                 $('.loader').addClass('display-none');
-
-
-                $('#actionButton').click(function(){
-                  $btn = $(this);
-                  $btn.attr('disabled', true);
-                  $checkboxes = $('.CheckboxGroup:checkbox:checked');
-                  $data = [];
-                  $.each($checkboxes, function(){
-                    $file = $(this).attr('data-file-name');
-                    $dir = $(this).attr('data-directory');
-                    $(this).parent().parent().remove();
-                    $data.push({
-                      file: $file,
-                      directory: $dir
-                    });
-                  })
-
-
-                  $.ajax({
-                    url: 'controller/api.php?action=move',
-                    type: 'POST',
-                    data: {
-                      data: $data,
-                      action: 1
-                    },
-                    dataType: 'json'
-                  }).done(function (response) {
-                    if(response){
-                      alert('Files successfully moved.');
-                    }else{
-                      alert('Something went wrong, please try again.');
-                      //location.reload();
-                    }
-                    $btn.attr('disabled', false);
-                  });
-                });
-
 
                 $('.delete-image').click(function(){
                   $btn = $(this);
