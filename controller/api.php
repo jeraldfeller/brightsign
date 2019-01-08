@@ -20,7 +20,9 @@ switch ($action) {
                 $fileExtension = $file['extension'];
                 $fileDirectories = [];
                 $dirFiles = $scanClass->scanDirectory($scanClass->cleanString($dir));
+                $fileOrientation = explode('_', $fileName)[0];
                 $data[] = [
+                    'orientation' => $fileOrientation,
                     'file' => $file['basename'],
                     'fileDirectory' => $dir.'/'.$file['basename'],
                     'ext' => $fileExtension,
@@ -61,6 +63,7 @@ switch ($action) {
 //            }
                 if (count($fileDirectories) > 0) {
                     $data[] = [
+                        'orientation' => $fileOrientation,
                         'file' => $file['basename'],
                         'fileDirectory' => 'Upload/' . $file['basename'],
                         'ext' => $fileExtension,

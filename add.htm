@@ -12,10 +12,11 @@
 
   <title>Brightsign Layouts</title>
   <link rel="stylesheet" type="text/css" href="maincss.css?v=1.1">
-  <link rel="stylesheet" type="text/css" href="assets/css/styles.css?v=1.2">
-
+  <link rel="stylesheet" type="text/css" href="assets/css/styles.css?v=1.5">
+  <link href="assets/lightbox/css/lightbox.min.css" rel="stylesheet">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <script src="assets/js/jquery-3.3.1.min.js"></script>
+
 </head>
 
 <body>
@@ -40,8 +41,9 @@
   <!-- end site -->
 </div>
 
+<script src="assets/lightbox/js/lightbox.min.js"></script>
+<script src="assets/js/app.js?v=2.1"></script>
 
-<script src="assets/js/app.js?v=1.8"></script>
 <script>
   $(function () {
 
@@ -113,6 +115,18 @@
                     }).done(function (response) {
                       $btn.parent().parent().parent().remove();
                     });
+                  }
+                });
+
+
+                // lightbox
+
+                $('.lightbox-action').click(function(){
+                  $ori = $(this).attr('data-orientation');
+                  if($ori == 'V'){
+                    $('#lightbox').addClass('rotate');
+                  }else{
+                    $('#lightbox').removeClass('rotate');
                   }
                 });
 

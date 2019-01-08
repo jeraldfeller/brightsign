@@ -36,7 +36,10 @@ function checkFile($files, $dir = '') {
 
 
 function buildHtml(file) {
+
   var directories = '';
+  var rotate = (file.orientation == 'V' ? 'rotate' : '');
+
   for(var i = 0; i < file.directories.length; i++){
     directories += '<label>' +
       '<input type="checkbox" class="CheckboxGroup" data-file-name="'+file.file+'" data-directory="'+file.directories[i].directory+'">' +
@@ -47,12 +50,12 @@ function buildHtml(file) {
 
 
   if(file.ext == 'mp4'){
-    var thumb = '<video class="video" style=" width: 192px; height: 108px; background: #fff" controls>'
+    var thumb = '<video class="video '+rotate+'" style=" width: 192px; height: 108px; background: #fff" controls>'
       + '<source src="'+file.fileDirectory+'" type="video/mp4">'
       + 'Your browser does not support HTML5 video.'
       + '</video>';
   }else{
-    var thumb = '<img src="'+file.fileDirectory+'" alt="" class="thumbnails"/>';
+    var thumb = '<a href="'+file.fileDirectory+'" class="lightbox-action" data-orientation="'+file.orientation+'"  data-lightbox="'+file.fileDirectory+'"><img src="'+file.fileDirectory+'" alt="" class="thumbnails '+rotate+'"/></a>';
   }
 
   return '<div style="padding-left: 50px; float: left; width: 300px; min-height: 330px;">' +
@@ -69,13 +72,14 @@ function buildHtml(file) {
 
 function buildHtmlSingle(file) {
 
+  var rotate = (file.orientation == 'V' ? 'rotate' : '');
   if(file.ext == 'mp4'){
-    var thumb = '<video class="video" style=" width: 192px; height: 108px; background: #fff" controls>'
+    var thumb = '<video class="video '+rotate+'" style=" width: 192px; height: 108px; background: #fff" controls>'
       + '<source src="'+file.fileDirectory+'" type="video/mp4">'
       + 'Your browser does not support HTML5 video.'
       + '</video>';
   }else{
-    var thumb = '<img src="'+file.fileDirectory+'" alt="" class="thumbnails"/>';
+    var thumb = '<a href="'+file.fileDirectory+'"  data-lightbox="'+file.fileDirectory+'" class="lightbox-action" data-orientation="'+file.orientation+'"><img src="'+file.fileDirectory+'" alt="" class="thumbnails '+rotate+'"/></a>';
   }
 
   return '<div style="padding-left: 50px; float: left; width: 300px; min-height: 200px;">' +
